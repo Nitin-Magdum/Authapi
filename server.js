@@ -10,8 +10,9 @@ const UserModel = require("./models/UserModel");
 const routes = require("./routers/UserRoutes");
 const repo = require("./repository/UserRepository");
 const app = express();
-const DB_URI = 'mongodb://127.0.0.1:27017/AuthDB';
-// const DB_URI = process.env.MONGODB_SERVER;
+// const DB_URI = 'mongodb://127.0.0.1:27017/AuthDB';
+const MONGO_URI='mongodb+srv://RajaDhurai:wIPHhwXDT1u6Zpep@cluster0.fgvpdxc.mongodb.net/test'
+const DB_URI = MONGO_URI;
 const store = new dbstore({
   uri: DB_URI,
   collection: "app-sessions",

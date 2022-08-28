@@ -2,7 +2,6 @@ const UserModel = require("../models/UserModel");
 const bcrypt = require("bcryptjs");
 const LocalStrategy = require("passport-local");
 const nodemailer = require('nodemailer');
-var otp = 0
 const RegisterUser = (userdata) => {
   return new Promise((resolve, reject) => {
     UserModel.findOne({ email: userdata.email }, (err, user) => {
@@ -11,7 +10,7 @@ const RegisterUser = (userdata) => {
           status: 409,
           message: "User with specified email already exists",
         });
-        console.log("Email already exists")
+        // console.log("Email already exists")
       } else if (!user) {
         let usermodel = new UserModel();
         usermodel.firstname = userdata.firstname;
@@ -31,7 +30,30 @@ const RegisterUser = (userdata) => {
     });
   });
 };
-
+function User(e) {
+  return new Promise((resolve, reject) => {
+    UserModel.findOne({ email: e }, (err, data) => {
+          if (!err) {
+              resolve(data);
+          } else {
+              reject(err);
+          }
+      });
+  });
+}
+function UpdatUser(id, user){
+  console.log(id)
+  console.log(user)
+  return new Promise((resolve, reject) => {
+      UserModel.findOneAndUpdate({ email: id }, {firstname:user.firstname,lastname:user.lastname}, (err, data) => {
+          if (!err) {
+              resolve(data);
+          } else {
+            console.log(err)
+          }
+      });
+  });
+}
 const LoginUser = () => {
   return new LocalStrategy(
     { usernameField: "email", passwordField: "password" },
@@ -107,4 +129,4 @@ const setpassword = (e) => {
 }
  
 
-module.exports = { RegisterUser, LoginUser,verifymail,sendmail,setpassword };
+module.exports = { RegisterUser, LoginUser,verifymail,sendmail,setpassword,User,UpdatUser };

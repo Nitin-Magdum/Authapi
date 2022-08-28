@@ -7,6 +7,16 @@ const RegisterUser = (req, res) => {
     res.send(data);
   });
 };
+const User = (req, res) => {
+  repo.User(req.params.id).then((data) => {
+    res.send(data);
+  });
+};
+const UpdatUser = (req, res) => {
+  repo.UpdatUser(req.params.id,req.body).then((data) => {
+    res.send(data);
+  });
+};
 const forgotpassword = (req,res) => {
   var a=Math.round(Math.random()*100000);
 a+=''
@@ -15,17 +25,17 @@ let d=repo.verifymail(req.body.email)
 d.then(data => {
   if (data.status === 200) {
     repo.sendmail(req.body.email, a)
-    res.send({status: 200, msg: "otp is send to your mail" })
+    res.send({status: 200, msg: "otp sent" })
     }
   else {
-      throw err
+     res.send({ status: 401,msg:"Email is not found"})
   }
 })
 }
 const setpassword = (req, res) => {
   var a=req.body.otp+''
   if (a != otp) {
-    res.send({ status: "400", message: "Invalid OTP" })
+    res.send({ status: 500, msg: "Invalid OTP" })
 }
 else {
   repo.setpassword(req.body).then(data => {
@@ -33,7 +43,7 @@ else {
           res.send({ status: 400, msg: "Password didn't match " })
       }
       else if (data.status === 200) {
-          res.send({ status: 200, msg: "Success " })
+          res.send({ status: 200, msg: "password changed successfully" })
       }
   })
 }
@@ -60,6 +70,16 @@ const VerifyToken = (req, res) => {
     res.send({ status: 200, isAuthenticated: true });
   }
 };
-
-module.exports = { RegisterUser, LoginUser, VerifyToken,forgotpassword ,setpassword };
+const logout = (req, res) => {
+  console.log(req.session)
+          req.session.destroy(err => {
+              if (!err) {
+                res.send({ status: 200, message: 'Logout successful' })
+              } else {
+                res.status(400).send('Unable to log out')
+              }
+          });
+     
+}
+module.exports = { User,UpdatUser,RegisterUser, LoginUser, VerifyToken,forgotpassword ,setpassword,logout };
 
