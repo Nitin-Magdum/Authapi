@@ -14,6 +14,7 @@ const User = (req, res) => {
 };
 const UpdatUser = (req, res) => {
   repo.UpdatUser(req.params.id,req.body).then((data) => {
+  
     res.send(data);
   });
 };
@@ -49,7 +50,7 @@ else {
 }
 };
 const LoginUser = (req, res) => {
-  //   console.log(req.session.passport);
+    // console.log(req.session.passport);
   res.send({
     status: 200,
     token: jwttocken.sign(req.session.passport, SECRET_KEY, {
@@ -71,7 +72,6 @@ const VerifyToken = (req, res) => {
   }
 };
 const logout = (req, res) => {
-  console.log(req.session)
           req.session.destroy(err => {
               if (!err) {
                 res.send({ status: 200, message: 'Logout successful' })

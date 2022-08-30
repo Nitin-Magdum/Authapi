@@ -42,14 +42,14 @@ function User(e) {
   });
 }
 function UpdatUser(id, user){
-  console.log(id)
-  console.log(user)
+  // console.log(id)
+  // console.log(user)
   return new Promise((resolve, reject) => {
       UserModel.findOneAndUpdate({ email: id }, {firstname:user.firstname,lastname:user.lastname}, (err, data) => {
           if (!err) {
-              resolve(data);
+              resolve("Updated");
           } else {
-            console.log(err)
+            reject(err)
           }
       });
   });
@@ -63,10 +63,12 @@ const LoginUser = () => {
           return done(err);
         }
         if (!user) {
-          return done(null, false, { message: "Incorrect Email ID" });
+          return done(null,false,  { message: "Incorrect Email ID" });
         }
         if (!bcrypt.compareSync(password, user.password)) {
-          return done(null, false, { message: "Incorrect Password" });
+
+          return done(null,false, { message: "Incorrect Password" });
+
         }
         return done(null, user);
       });
